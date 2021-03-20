@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Manager\HomeManager;
 use App\Message\HomeMessage;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -27,13 +28,15 @@ class HomeController extends AbstractController
     }
 
     #[Route('/home', name: 'home')]
-    public function index(): Response
+    public function index(Request $request) : Response
     {
+        $path = $request->get('path');
+        $message = $request->get('message');
         $this->messageBus->dispatch(new HomeMessage(1548));
 
         return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/HomeController.php',
+            'message' => $path,
+            'path' => $message,
         ]);
     }
 }
